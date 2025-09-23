@@ -1,9 +1,32 @@
-
-
+import { useState } from 'react'
+import api from '../api/api'
+import { useNavigate } from 'react-router-dom'
 
 
 
 function Login() {
+const [email, setEmail] = useState('')
+const [password, setPassword] = useState('')
+const [error, setError] = useState('')
+const [loading, setLoading] = useState(false)
+const navigate = useNavigate()
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('')
+    setLoading(true)
+    try {
+        const response = await api.post('/auth/login', { email, password })
+        console.log("Login successful", response)
+        localStorage.setItem('token', response.data.data.token)
+        console.log("Token:", response)
+        navigate('/')
+    } catch (err) {
+        console.error("Login failed:", err.response?.data || err.message);
+        setError("Invalid email or password");
+    } finally {
+      setLoading(false)
+    }
+    }
   return (
     <section
       className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center"
@@ -29,7 +52,10 @@ function Login() {
               <input
                 type="email"
                 placeholder="you@example.com"
-                className="mt-1 w-full rounded-lg border border-white/20 bg-white/90 text-gray-900 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+                className="mt-1 w-full rounded-lg border border-white/20 bg-white/90 text-gray-900 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
               />
             </div>
             <div>
@@ -37,12 +63,29 @@ function Login() {
               <input
                 type="password"
                 placeholder="••••••••"
-                className="mt-1 w-full rounded-lg border border-white/20 bg-white/90 text-gray-900 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+                className="mt-1 w-full rounded-lg border border-white/20 bg-white/90 text-gray-900 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
               />
             </div>
-            <button className="w-full rounded-lg bg-blue-600 text-white py-3.5 font-medium hover:bg-blue-700 transition-colors">
-              Log in
+            
+            <button
+              className="w-full rounded-lg bg-blue-600 text-white py-3.5 font-medium hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center justify-center"
+              onClick={handleSubmit}
+              disabled={loading}
+              aria-busy={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="h-5 w-5 mr-2 inline-block border-2 border-white/60 border-t-transparent rounded-full animate-spin" />
+                  Signing in…
+                </>
+              ) : (
+                'Log in'
+              )}
             </button>
+            {error && <p className="text-red-500">{error}</p>}
           </div>
         </div>
       </div>

@@ -1,8 +1,15 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function Layout() {
   const [open, setOpen] = useState(false)
+  const isLoggedIn = localStorage.getItem('token')
+  const navigate = useNavigate()
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    navigate("/login")
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <header className="border-b bg-white/60 backdrop-blur sticky top-0 z-10">
@@ -14,19 +21,43 @@ function Layout() {
             </svg>
           </button>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <NavLink to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Home</NavLink>
-            <NavLink to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Auctions</NavLink>
-            <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>About</NavLink>
+            {isLoggedIn && (
+              <NavLink to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Home</NavLink>
+            )}
+            {isLoggedIn && (
+              <NavLink to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Auctions</NavLink>
+            )}
+            {isLoggedIn && (
+              <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>About</NavLink>
+            )}
+            {isLoggedIn && (
+              <button onClick={() => { setOpen(false); handleLogout(); }} className="text-gray-700 hover:text-blue-600">Logout</button>
+            )}
+            {!isLoggedIn && (
+              <NavLink to="/login" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Login</NavLink>
+            )}
           </nav>
         </div>
-        
-        
+
+
         {open && (
           <div className="md:hidden border-t bg-white">
             <nav className="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm">
-              <NavLink onClick={() => setOpen(false)} to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Home</NavLink>
-              <NavLink onClick={() => setOpen(false)} to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Auctions</NavLink>
-              <NavLink onClick={() => setOpen(false)} to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>About</NavLink>
+              {isLoggedIn && (
+                <NavLink onClick={() => setOpen(false)} to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Home</NavLink>
+              )}
+              {isLoggedIn && (
+                <NavLink onClick={() => setOpen(false)} to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Auctions</NavLink>
+              )}
+              {isLoggedIn && (
+                <NavLink onClick={() => setOpen(false)} to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>About</NavLink>
+              )}
+              {isLoggedIn && (
+                <button onClick={() => { setOpen(false); handleLogout(); }} className="text-left text-gray-700">Logout</button>
+              )}
+              {!isLoggedIn && (
+                <NavLink onClick={() => setOpen(false)} to="/login" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Login</NavLink>
+              )}
             </nav>
           </div>
         )}
