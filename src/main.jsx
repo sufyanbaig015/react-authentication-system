@@ -6,13 +6,14 @@ import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import Auctions from './pages/Auctions.jsx'
 import About from './pages/About.jsx'
+import Login from './components/Login.jsx'
 
 
 const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
-      { path: '/', element: <Home /> },
+      { path: '/', element: <Login /> },
       { path: '/home', element: <Home /> },
       { path: '/auctions', element: <Auctions /> },
       { path: '/about', element: <About /> },

@@ -17,7 +17,6 @@ function Layout() {
             <NavLink to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Home</NavLink>
             <NavLink to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Auctions</NavLink>
             <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>About</NavLink>
-
           </nav>
         </div>
         
