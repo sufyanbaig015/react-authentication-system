@@ -29,7 +29,7 @@ const handleSubmit = async (e) => {
     }
   return (
     <section
-      className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center"
+      className="relative min-h-full flex items-center justify-center"
       style={{
         backgroundImage:
           "url('https://images.unsplash.com/photo-1616455165195-239de2592faa?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",

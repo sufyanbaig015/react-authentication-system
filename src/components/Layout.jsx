@@ -13,30 +13,41 @@ function Layout() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="border-b bg-white/60 backdrop-blur sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
           <Link to="/" className="text-xl font-bold">BidCars</Link>
-          <button aria-label="Toggle Menu" onClick={() => setOpen(v => !v)} className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded hover:bg-gray-100">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-              <path fillRule="evenodd" d="M3.75 6.75A.75.75 0 0 1 4.5 6h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm0 5.25a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm.75 4.5a.75.75 0 0 0 0 1.5h15a.75.75 0 0 0 0-1.5h-15Z" clipRule="evenodd" />
-            </svg>
-          </button>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            {isLoggedIn && (
-              <NavLink to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Home</NavLink>
-            )}
-            {isLoggedIn && (
-              <NavLink to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Auctions</NavLink>
-            )}
-            {isLoggedIn && (
-              <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>About</NavLink>
-            )}
-            {isLoggedIn && (
-              <button onClick={() => { setOpen(false); handleLogout(); }} className="text-gray-700 hover:text-blue-600">Logout</button>
-            )}
-            {!isLoggedIn && (
-              <NavLink to="/login" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Login</NavLink>
-            )}
-          </nav>
+          <div className="flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-6 text-sm">
+              {isLoggedIn && (
+                <NavLink to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Home</NavLink>
+              )}
+              {isLoggedIn && (
+                <NavLink to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Auctions</NavLink>
+              )}
+              {isLoggedIn && (
+                <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>About</NavLink>
+              )}
+              {isLoggedIn && (
+                <button onClick={() => { setOpen(false); handleLogout(); }} className="text-gray-700 hover:text-blue-600">Logout</button>
+              )}
+              {!isLoggedIn && (
+                <NavLink to="/login" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Login</NavLink>
+              )}
+            </nav>
+            <Link
+              to={isLoggedIn ? "/profile" : "/login"}
+              className="inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
+              title={isLoggedIn ? 'Profile' : 'Sign in'}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-gray-700">
+                <path fillRule="evenodd" d="M12 2.25a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9ZM3.75 20.1a8.25 8.25 0 1 1 16.5 0 .9.9 0 0 1-.9.9H4.65a.9.9 0 0 1-.9-.9Z" clipRule="evenodd" />
+              </svg>
+            </Link>
+            <button aria-label="Toggle Menu" onClick={() => setOpen(v => !v)} className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded hover:bg-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                <path fillRule="evenodd" d="M3.75 6.75A.75.75 0 0 1 4.5 6h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm0 5.25a.75.75 0 0 1 .75-.75h15a.75.75 0 0 1 0 1.5h-15a.75.75 0 0 1-.75-.75Zm.75 4.5a.75.75 0 0 0 0 1.5h15a.75.75 0 0 0 0-1.5h-15Z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
         </div>
 
 

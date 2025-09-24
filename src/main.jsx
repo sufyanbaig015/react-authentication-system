@@ -7,6 +7,7 @@ import Home from './pages/Home.jsx'
 import Auctions from './pages/Auctions.jsx'
 import About from './pages/About.jsx'
 import Login from './components/Login.jsx'
+import Profile from './pages/Profile.jsx'
 
 
 export function RequireAuth({ children }) {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/auctions', element: <Auctions /> },
       { path: '/about', element: <About /> },
+      { path: '/profile', element: <Profile /> },
     ],
   },
   {
