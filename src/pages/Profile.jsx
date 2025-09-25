@@ -1,138 +1,152 @@
+import React, { useEffect, useMemo, useState } from "react";
+import api from '../api/api'
 
 function Profile() {
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  return ( 
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">Profile</h1>
-      </div>
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const res = await api.get('/user/profile')
+        if (!mounted) return
+        const data = res?.data?.data || res?.data || null
+        // When backend wraps inside { statusCode, success, message, data x}
+        setProfile(data)
+      } catch (err) {
+        if (!mounted) return
+        const status = err?.response?.status
+        const msg = err?.response?.data?.message || err?.message
+        setError(status ? `HTTP ${status}: ${msg}` : msg)
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    })()
+    return () => { mounted = false }
+  }, [])
 
-      <div className="grid gap-6 md:grid-cols-3">
-        {/* Left Sidebar */}
-        <section className="md:col-span-1 rounded-2xl border border-gray-200 bg-white p-6">
-          <div className="flex flex-col items-center text-center">
-            {/* Avatar */}
-            <div className="h-24 w-24 rounded-full bg-gradient-to-br from-blue-600 to-indigo-500 text-white grid place-items-center text-2xl font-semibold">
-              MS
-            </div>
+  const formatted = useMemo(() => {
+    if (!profile) return {}
+    const formatDate = (iso) => {
+      if (!iso) return '—'
+      try { return new Date(iso).toLocaleString() } catch { return String(iso) }
+    }
+    return {
+      createdAt: formatDate(profile.createdAt || profile.created_at),
+      updatedAt: formatDate(profile.updatedAt || profile.updated_at),
+      resetPasswordExpire: formatDate(profile.resetPasswordExpire),
+    }
+  }, [profile])
 
-            {/* Name & Email */}
-            <h2 className="mt-4 text-xl font-semibold text-gray-900">
-              Muhammad Shaheer Aziz
-            </h2>
-            <p className="text-sm text-gray-500">h.m.shaheeraziz@gmail.com</p>
+  if (loading) return (
+    <div className="min-h-screen grid place-items-center px-4 py-8">
+      <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-indigo-600" aria-label="Loading" />
+    </div>
+  );
+  if (error) return (
+    <div className="min-h-screen grid place-items-center px-4 py-8">
+      <p className="text-red-600">Error: {error}</p>
+    </div>
+  );
+  if (!profile) return (
+    <div className="min-h-screen grid place-items-center px-4 py-8">
+      <p>No profile data found.</p>
+    </div>
+  );
 
-            {/* Badges */}
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">
-                Email verified
+  const documents = Array.isArray(profile.documents) ? profile.documents : []
+  const profilePic = profile.profilePicture
+
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        <div className="flex items-center gap-4">
+          {profilePic ? (
+            <img
+              src={profilePic}
+              alt={profile.username ? `${profile.username} profile photo` : 'Profile photo'}
+              className="h-20 w-20 rounded-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div className="h-20 w-20 rounded-full bg-gray-200 grid place-items-center text-gray-500">N/A</div>
+          )}
+          <div>
+            <h1 className="text-2xl font-semibold">{profile.username || 'User'}</h1>
+            <p className="text-gray-600">{profile.email}</p>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${profile.isEmailVerified ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                Email {profile.isEmailVerified ? 'Verified' : 'Not Verified'}
               </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">
-                approved
+              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${profile.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                {profile.isActive ? 'Active' : 'Inactive'}
               </span>
-              <span className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium bg-gray-50 text-gray-700 ring-1 ring-gray-200">
-                user
+              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${profile.documentVerified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
+                Doc: {profile.documentVerificationStatus || (profile.documentVerified ? 'verified' : 'unverified')}
               </span>
             </div>
           </div>
+        </div>
 
-          {/* User Info */}
-          <dl className="mt-6 space-y-3 text-sm">
-            <div className="flex items-center justify-between">
-              <dt className="text-gray-500">User ID</dt>
-              <dd
-                className="text-gray-900 font-medium truncate max-w-[60%]"
-                title="7b785a52-eeb7-4022-9968-a30aa4bfd269"
-              >
-                7b785a52-eeb7-4022-9968-a30aa4bfd269
-              </dd>
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
+          <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h2 className="text-lg font-medium">Account Details</h2>
+            <div className="mt-4 space-y-2">
+              <Row label="User ID" value={profile.id} />
+              <Row label="Username" value={profile.username} />
+              <Row label="Email" value={profile.email} />
+              <Row label="Role" value={profile.role} />
+              <Row label="Phone" value={profile.phone} />
+              <Row label="Address" value={profile.address} />
+              <Row label="Contact ID" value={profile.contactID} />
             </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-gray-500">Phone</dt>
-              <dd className="text-gray-900 font-medium">+1 (908) 862-2232</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-gray-500">Active</dt>
-              <dd className="text-gray-900 font-medium">Yes</dd>
-            </div>
-            <div className="flex items-start justify-between">
-              <dt className="text-gray-500">Address</dt>
-              <dd className="text-gray-900 font-medium text-right max-w-[60%]">
-                America
-              </dd>
-            </div>
-          </dl>
-        </section>
+          </section>
 
-        {/* Right Section */}
-        <section className="md:col-span-2 space-y-6">
-          {/* Account Details */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6">
-            <h3 className="text-base font-semibold text-gray-900">
-              Account details
-            </h3>
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-              <div>
-                <div className="text-gray-500">Created</div>
-                <div className="font-medium text-gray-900">
-                  3/27/2025, 9:41:22 PM
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-500">Last updated</div>
-                <div className="font-medium text-gray-900">
-                  7/19/2025, 11:03:12 PM
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-500">Contact ID</div>
-                <div className="font-medium text-gray-900">
-                  jo8iKD0aQkigERbWrtEi
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-500">Email token</div>
-                <div className="font-medium text-gray-900">—</div>
-              </div>
+          <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h2 className="text-lg font-medium">Timestamps</h2>
+            <div className="mt-4 space-y-2">
+              <Row label="Created At" value={formatted.createdAt} />
+              <Row label="Updated At" value={formatted.updatedAt} />
             </div>
-          </div>
+          </section>
 
-          {/* Documents */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-900">
-                Documents
-              </h3>
-              <span className="text-sm text-gray-500">2 file(s)</span>
+          <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm md:col-span-2">
+            <h2 className="text-lg font-medium">Documents</h2>
+            <div className="mt-4">
+              {documents.length === 0 ? (
+                <p className="text-gray-600">No documents uploaded.</p>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {documents.map((url, idx) => (
+                    <a key={url + idx} href={url} target="_blank" rel="noreferrer" className="block">
+                      <img
+                        src={url}
+                        alt={`Document ${idx + 1}`}
+                        className="h-32 w-full object-cover rounded-lg border"
+                        loading="lazy"
+                      />
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              <a
-                href="#"
-                className="group block overflow-hidden rounded-xl border border-gray-200"
-              >
-                <img
-                  src="https://res.cloudinary.com/dvkl41t5v/image/upload/v1743111882/iqtdjpw4o6pwergrbyjj.jpg"
-                  alt="Document 1"
-                  className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </a>
-              <a
-                href="#"
-                className="group block overflow-hidden rounded-xl border border-gray-200"
-              >
-                <img
-                  src="https://res.cloudinary.com/dvkl41t5v/image/upload/v1743111883/toea4gmuzixj0xnsaqnd.jpg"
-                  alt="Document 2"
-                  className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </a>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </div>
   );
+}
+
+function Row({ label, value }) {
+  const display = value === null || value === undefined || value === '' ? '—' : String(value)
+  return (
+    <div className="flex items-start justify-between gap-6">
+      <span className="text-gray-600">{label}</span>
+      <span className="max-w-[65%] text-gray-900 break-all">{display}</span>
+    </div>
+  )
 }
 
 export default Profile;

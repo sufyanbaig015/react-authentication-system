@@ -16,9 +16,11 @@ const handleSubmit = async (e) => {
     setLoading(true)
     try {
         const response = await api.post('/auth/login', { email, password })
-        console.log("Login successful", response)
-        localStorage.setItem('token', response.data.data.token)
-        console.log("Token:", response)
+        const token = response?.data?.data?.token || response?.data?.token
+        if (token) {
+          localStorage.setItem('token', token)
+          api.defaults.headers.common.Authorization = `Bearer ${token}`
+        }
         navigate('/')
     } catch (err) {
         console.error("Login failed:", err.response?.data || err.message);
