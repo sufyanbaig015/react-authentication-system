@@ -21,7 +21,7 @@ function Layout() {
                 <NavLink to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Home</NavLink>
               )}
               {isLoggedIn && (
-                <NavLink to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Auctions</NavLink>
+                <NavLink to="/cars" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>Cars</NavLink>
               )}
               {isLoggedIn && (
                 <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700 hover:text-blue-600'}>About</NavLink>
@@ -58,7 +58,7 @@ function Layout() {
                 <NavLink onClick={() => setOpen(false)} to="/" end className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Home</NavLink>
               )}
               {isLoggedIn && (
-                <NavLink onClick={() => setOpen(false)} to="/auctions" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Auctions</NavLink>
+                <NavLink onClick={() => setOpen(false)} to="/cars" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>Cars</NavLink>
               )}
               {isLoggedIn && (
                 <NavLink onClick={() => setOpen(false)} to="/about" className={({ isActive }) => isActive ? 'text-blue-600 font-medium' : 'text-gray-700'}>About</NavLink>

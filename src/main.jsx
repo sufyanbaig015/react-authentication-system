@@ -6,6 +6,7 @@ import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import Auctions from './pages/Auctions.jsx'
 import About from './pages/About.jsx'
+import VehicleDetail from './components/VehicleDetail.jsx'
 import Login from './components/Login.jsx'
 import Profile from './pages/Profile.jsx'
 
@@ -29,8 +30,11 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: '/', element: <Home /> },
-      { path: '/auctions', element: <Auctions /> },
+      { path: '/cars', element: <Navigate to="/" replace /> },
+      { path: '/cars/:type', element: <Navigate to="/" replace /> },
+      { path: '/auctions', element: <Navigate to="/" replace /> },
       { path: '/about', element: <About /> },
+      { path: '/vehicle/:carId', element: <VehicleDetail /> },
       { path: '/profile', element: <Profile /> },
     ],
   },

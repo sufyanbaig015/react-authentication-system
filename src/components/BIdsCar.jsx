@@ -41,11 +41,11 @@ const BidsCar = () => {
 			<section id="featured" className="max-w-6xl mx-auto px-4 py-12">
 				<div className="flex items-end justify-between">
 					<h2 className="text-xl font-semibold">Featured cars</h2>
-					<Link
-						to="/auctions"
+                    <Link
+                        to="/cars"
 						className="text-sm text-blue-600 hover:underline"
 					>
-						View all
+                        Browse categories
 					</Link>
 				</div>
 
@@ -53,7 +53,7 @@ const BidsCar = () => {
 					{error && <p className="text-red-600">{error}</p>}
 
 					{cars.map((car, index) => (
-						<div
+                        <div
 							key={car.id || car.lot_id || index}
 							className="group rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
 						>
@@ -79,8 +79,15 @@ const BidsCar = () => {
 								</div>
 							); })()}
 
-							<div className="p-4">
-								<h3 className="font-semibold text-lg truncate" title={car.title}>{car.title || `${car.make || ""} ${car.model || ""}`.trim() || "Untitled"}</h3>
+                            <div className="p-4">
+                                <h3 className="font-semibold text-lg truncate" title={car.title}>
+                                    <Link
+                                        to={`/vehicle/${encodeURIComponent(car.id || car.lot_id || index)}`}
+                                        className="hover:underline"
+                                    >
+                                        {car.title || `${car.make || ""} ${car.model || ""}`.trim() || "Untitled"}
+                                    </Link>
+                                </h3>
 								<p className="text-sm text-gray-500 truncate">VIN: {car.vin || "N/A"}</p>
 
 								<div className="mt-4 grid grid-cols-2 gap-3 text-sm">

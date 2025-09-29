@@ -67,23 +67,23 @@ function Profile() {
             <img
               src={profilePic}
               alt={profile.username ? `${profile.username} profile photo` : 'Profile photo'}
-              className="h-20 w-20 rounded-full object-cover"
+              className="h-20 w-20 rounded-full object-cover ring-2 ring-indigo-100 shadow-sm"
               loading="lazy"
             />
           ) : (
-            <div className="h-20 w-20 rounded-full bg-gray-200 grid place-items-center text-gray-500">N/A</div>
+            <div className="h-20 w-20 rounded-full bg-gray-200 grid place-items-center text-gray-500 ring-2 ring-indigo-100 shadow-sm">N/A</div>
           )}
           <div>
             <h1 className="text-2xl font-semibold">{profile.username || 'User'}</h1>
             <p className="text-gray-600">{profile.email}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
-              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${profile.isEmailVerified ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${profile.isEmailVerified ? 'bg-green-50 text-green-700 ring-green-200' : 'bg-yellow-50 text-yellow-700 ring-yellow-200'}`}>
                 Email {profile.isEmailVerified ? 'Verified' : 'Not Verified'}
               </span>
-              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${profile.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${profile.isActive ? 'bg-green-50 text-green-700 ring-green-200' : 'bg-red-50 text-red-700 ring-red-200'}`}>
                 {profile.isActive ? 'Active' : 'Inactive'}
               </span>
-              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${profile.documentVerified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
+              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${profile.documentVerified ? 'bg-blue-50 text-blue-700 ring-blue-200' : 'bg-gray-50 text-gray-700 ring-gray-200'}`}>
                 Doc: {profile.documentVerificationStatus || (profile.documentVerified ? 'verified' : 'unverified')}
               </span>
             </div>
@@ -94,7 +94,8 @@ function Profile() {
           <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
             <h2 className="text-lg font-medium">Account Details</h2>
             <div className="mt-4 space-y-2">
-              <Row label="User ID" value={profile.id} />
+
+              <Row label="User ID" value={profile.id} /> 
               <Row label="Username" value={profile.username} />
               <Row label="Email" value={profile.email} />
               <Row label="Role" value={profile.role} />
@@ -113,20 +114,46 @@ function Profile() {
           </section>
 
           <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm md:col-span-2">
-            <h2 className="text-lg font-medium">Documents</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-medium">Documents</h2>
+              {documents.length > 0 && (
+                <span className="text-xs text-gray-500">{documents.length} file{documents.length > 1 ? 's' : ''}</span>
+              )}
+            </div>
             <div className="mt-4">
               {documents.length === 0 ? (
-                <p className="text-gray-600">No documents uploaded.</p>
+                <div className="grid place-items-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 py-10">
+                  <div className="text-center">
+                    <div className="mx-auto mb-2 h-10 w-10 rounded-full bg-white shadow-sm ring-1 ring-gray-200 grid place-items-center">📄</div>
+                    <p className="text-gray-600">No documents uploaded.</p>
+                  </div>
+                </div>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {documents.map((url, idx) => (
-                    <a key={url + idx} href={url} target="_blank" rel="noreferrer" className="block">
+                    <a
+                      key={url + idx}
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group relative block overflow-hidden rounded-xl border border-gray-200 shadow-sm ring-1 ring-transparent hover:ring-indigo-200 transition-all"
+                    >
+                      <span className="absolute left-2 top-2 z-10 inline-flex items-center rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                        #{idx + 1}
+                      </span>
                       <img
                         src={url}
                         alt={`Document ${idx + 1}`}
-                        className="h-32 w-full object-cover rounded-lg border"
+                        className="h-32 w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
                         loading="lazy"
                       />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                        <div className="inline-flex items-center gap-1 rounded-md bg-white/90 px-2 py-1 text-[11px] font-medium text-gray-700 shadow-sm ring-1 ring-gray-200">
+                          <span>🔍</span>
+                          <span>Open</span>
+                        </div>
+                      </div>
                     </a>
                   ))}
                 </div>
@@ -142,7 +169,7 @@ function Profile() {
 function Row({ label, value }) {
   const display = value === null || value === undefined || value === '' ? '—' : String(value)
   return (
-    <div className="flex items-start justify-between gap-6">
+    <div className="flex items-start justify-between gap-6 py-2 border-b last:border-b-0">
       <span className="text-gray-600">{label}</span>
       <span className="max-w-[65%] text-gray-900 break-all">{display}</span>
     </div>

@@ -14,4 +14,16 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+
+export const getCarByLotId = async (lotId) => {
+  try {
+    const response = await api.get(`/cars/get-car-by-lot-id?lot_id=${lotId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching car by lot ID:', error);
+    throw error;
+  }
+};
+
+
 export default api;

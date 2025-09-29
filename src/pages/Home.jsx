@@ -8,7 +8,7 @@ function Card({ title, subtitle, img }) {
       <div className="p-4">
         <h3 className="font-semibold">{title}</h3>
         <p className="text-sm text-gray-600">{subtitle}</p>
-        <Link to="/auctions" className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700">View</Link>
+        <Link to="/cars" className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700">View</Link>
       </div>
     </div>
   )
@@ -42,8 +42,8 @@ function Home() {
               <a href="#featured" aria-label="Browse Featured Cars" className="px-5 py-2.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-center">
                 Browse Featured
               </a>
-              <Link to="/auctions" aria-label="View All Auctions" className="px-5 py-2.5 rounded-md bg-white/90 text-gray-900 hover:bg-white text-center">
-                All Auctions
+              <Link to="/cars" aria-label="Browse Categories" className="px-5 py-2.5 rounded-md bg-white/90 text-gray-900 hover:bg-white text-center">
+                Browse Categories
               </Link>
             </div>
             <div className="mt-6 grid grid-cols-3 gap-3 text-center text-xs sm:text-sm text-white/80">
