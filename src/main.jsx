@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import './index.css'
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
+import CarSearchPage from './pages/CarSearchPage.jsx'
 import Auctions from './pages/Auctions.jsx'
 import About from './pages/About.jsx'
 import VehicleDetail from './components/VehicleDetail.jsx'
@@ -30,8 +31,8 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: '/', element: <Home /> },
-      { path: '/cars', element: <Navigate to="/" replace /> },
-      { path: '/cars/:type', element: <Navigate to="/" replace /> },
+      { path: '/cars', element: <CarSearchPage /> },
+      { path: '/cars/:type', element: <CarSearchPage /> },
       { path: '/auctions', element: <Navigate to="/" replace /> },
       { path: '/about', element: <About /> },
       { path: '/vehicle/:carId', element: <VehicleDetail /> },
