@@ -6,7 +6,7 @@ const BidsCar = () => {
 	const [error, setError] = useState("");
 
 	useEffect(() => {
-		fetch("http://localhost:8000/api/v1/cars/get-all-cars/testing")
+		fetch("http://localhost:8000/api/v1/cars/get-all-cars")
 			.then((res) => {
 				if (!res.ok) throw new Error(`Request failed: ${res.status}`);
 				return res.json();
@@ -45,7 +45,7 @@ const BidsCar = () => {
                         to="/cars"
 						className="text-sm text-blue-600 hover:underline"
 					>
-                        Browse categories
+                        View all cars
 					</Link>
 				</div>
 

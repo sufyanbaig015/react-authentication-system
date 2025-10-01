@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getCarByLotId } from "../api/api";
+import Profile from "../pages/Profile";
 
 function VehicleDetail() {
   const { carId } = useParams();
@@ -169,10 +170,12 @@ function VehicleDetail() {
           </div>
         </div>
       </div>
+      <div className="mt-8">
+        <Profile />
+      </div>
     </div>
   );
 }
-
 function InfoRow({ label, value }) {
   const display = value === null || value === undefined || value === '' ? '—' : String(value);
   return (

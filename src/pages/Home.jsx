@@ -43,7 +43,7 @@ function Home() {
                 Browse Featured
               </a>
               <Link to="/cars" aria-label="Browse Categories" className="px-5 py-2.5 rounded-md bg-white/90 text-gray-900 hover:bg-white text-center">
-                Browse Categories
+                View all cars
               </Link>
             </div>
             <div className="mt-6 grid grid-cols-3 gap-3 text-center text-xs sm:text-sm text-white/80">
